@@ -4,6 +4,21 @@ const ctx = canvas.getContext("2d");
 canvas.width = 1200;
 canvas.height = 675;
 
+const jumpSound = new Audio("sounds/jump.wav");
+const coinSound = new Audio("sounds/coin.wav");
+const stompSound = new Audio("sounds/stomp.wav");
+const deathSound = new Audio("sounds/death.wav");
+const winSound = new Audio("sounds/win.wav");
+const backgroundMusic = new Audio("sounds/music.mp3");
+
+jumpSound.volume = 0.5;
+coinSound.volume = 0.6;
+stompSound.volume = 0.6;
+deathSound.volume = 0.6;
+winSound.volume = 0.7;
+backgroundMusic.volume = 0.5;
+backgroundMusic.loop = true;
+
 let gameRunning = false;
 let score = 0;
 let coinsCollected = 0;
@@ -119,9 +134,15 @@ function updatePlayer() {
     player.velocityX = player.speed;
   }
 
-  if ((keys["Space"] || keys["ArrowUp"] || keys["KeyW"]) && player.grounded) {
+  if (
+    (keys["Space"] || keys["ArrowUp"] || keys["KeyW"]) &&
+    player.grounded
+  ) {
     player.velocityY = -player.jumpPower;
     player.grounded = false;
+
+    jumpSound.currentTime = 0;
+    jumpSound.play().catch(() => {});
   }
 
   player.velocityY += player.gravity;
@@ -181,6 +202,10 @@ function updateCoins() {
       coin.collected = true;
       coinsCollected++;
       score += 100;
+
+      coinSound.currentTime = 0;
+      coinSound.play().catch(() => {});
+
       updateHUD();
     }
   }
@@ -199,10 +224,17 @@ function updateEnemies() {
     }
 
     if (collision(player, enemy)) {
-      if (player.velocityY > 0 && player.y + player.height - enemy.y < 25) {
+      if (
+        player.velocityY > 0 &&
+        player.y + player.height - enemy.y < 25
+      ) {
         enemy.alive = false;
         player.velocityY = -10;
         score += 200;
+
+        stompSound.currentTime = 0;
+        stompSound.play().catch(() => {});
+
         updateHUD();
       } else {
         loseLife();
@@ -218,6 +250,13 @@ function checkGoal() {
 }
 
 function loseLife() {
+  if (!gameRunning) {
+    return;
+  }
+
+  deathSound.currentTime = 0;
+  deathSound.play().catch(() => {});
+
   lives--;
   updateHUD();
 
@@ -280,11 +319,21 @@ function drawPlatforms() {
 
     ctx.fillStyle = "#7b4a24";
 
-    ctx.fillRect(x, platform.y, platform.width, platform.height);
+    ctx.fillRect(
+      x,
+      platform.y,
+      platform.width,
+      platform.height
+    );
 
     ctx.fillStyle = "#45a049";
 
-    ctx.fillRect(x, platform.y, platform.width, 12);
+    ctx.fillRect(
+      x,
+      platform.y,
+      platform.width,
+      12
+    );
   }
 }
 
@@ -294,19 +343,39 @@ function drawPlayer() {
 
   ctx.fillStyle = player.color;
 
-  ctx.fillRect(x, y + 15, player.width, player.height - 15);
+  ctx.fillRect(
+    x,
+    y + 15,
+    player.width,
+    player.height - 15
+  );
 
   ctx.fillStyle = "#ffd0a8";
 
-  ctx.fillRect(x + 5, y, 25, 20);
+  ctx.fillRect(
+    x + 5,
+    y,
+    25,
+    20
+  );
 
   ctx.fillStyle = "#b91c1c";
 
-  ctx.fillRect(x + 3, y - 5, 29, 8);
+  ctx.fillRect(
+    x + 3,
+    y - 5,
+    29,
+    8
+  );
 
   ctx.fillStyle = "#111";
 
-  ctx.fillRect(x + 22, y + 7, 4, 4);
+  ctx.fillRect(
+    x + 22,
+    y + 7,
+    4,
+    4
+  );
 }
 
 function drawCoins() {
@@ -321,7 +390,13 @@ function drawCoins() {
 
     ctx.beginPath();
 
-    ctx.arc(x, coin.y, 12, 0, Math.PI * 2);
+    ctx.arc(
+      x,
+      coin.y,
+      12,
+      0,
+      Math.PI * 2
+    );
 
     ctx.fill();
 
@@ -342,19 +417,44 @@ function drawEnemies() {
 
     ctx.fillStyle = "#633b8f";
 
-    ctx.fillRect(x, enemy.y, enemy.width, enemy.height);
+    ctx.fillRect(
+      x,
+      enemy.y,
+      enemy.width,
+      enemy.height
+    );
 
     ctx.fillStyle = "white";
 
-    ctx.fillRect(x + 7, enemy.y + 8, 8, 8);
+    ctx.fillRect(
+      x + 7,
+      enemy.y + 8,
+      8,
+      8
+    );
 
-    ctx.fillRect(x + 25, enemy.y + 8, 8, 8);
+    ctx.fillRect(
+      x + 25,
+      enemy.y + 8,
+      8,
+      8
+    );
 
     ctx.fillStyle = "#111";
 
-    ctx.fillRect(x + 10, enemy.y + 10, 4, 4);
+    ctx.fillRect(
+      x + 10,
+      enemy.y + 10,
+      4,
+      4
+    );
 
-    ctx.fillRect(x + 28, enemy.y + 10, 4, 4);
+    ctx.fillRect(
+      x + 28,
+      enemy.y + 10,
+      4,
+      4
+    );
   }
 }
 
@@ -363,7 +463,12 @@ function drawGoal() {
 
   ctx.fillStyle = "#eee";
 
-  ctx.fillRect(x, goal.y, 6, goal.height);
+  ctx.fillRect(
+    x,
+    goal.y,
+    6,
+    goal.height
+  );
 
   ctx.fillStyle = "#ff4757";
 
@@ -386,9 +491,21 @@ function draw() {
 }
 
 function updateHUD() {
-  document.getElementById("lives").textContent = lives;
-  document.getElementById("coins").textContent = coinsCollected;
-  document.getElementById("score").textContent = score;
+  const livesElement = document.getElementById("lives");
+  const coinsElement = document.getElementById("coins");
+  const scoreElement = document.getElementById("score");
+
+  if (livesElement) {
+    livesElement.textContent = lives;
+  }
+
+  if (coinsElement) {
+    coinsElement.textContent = coinsCollected;
+  }
+
+  if (scoreElement) {
+    scoreElement.textContent = score;
+  }
 }
 
 function gameLoop() {
@@ -408,10 +525,11 @@ function gameLoop() {
 function startGame() {
   gameRunning = true;
 
+  backgroundMusic.currentTime = 0;
+  backgroundMusic.play().catch(() => {});
+
   document.getElementById("startScreen").classList.add("hidden");
-
   document.getElementById("gameOverScreen").classList.add("hidden");
-
   document.getElementById("winScreen").classList.add("hidden");
 
   resetGame();
@@ -443,6 +561,8 @@ function resetGame() {
 function gameOver() {
   gameRunning = false;
 
+  backgroundMusic.pause();
+
   document.getElementById("finalScore").textContent = score;
 
   document.getElementById("gameOverScreen").classList.remove("hidden");
@@ -451,13 +571,27 @@ function gameOver() {
 function winGame() {
   gameRunning = false;
 
+  backgroundMusic.pause();
+
+  winSound.currentTime = 0;
+  winSound.play().catch(() => {});
+
   document.getElementById("winScore").textContent = score;
 
   document.getElementById("winScreen").classList.remove("hidden");
 }
 
-document.getElementById("startButton").addEventListener("click", startGame);
+document.getElementById("startButton").addEventListener(
+  "click",
+  startGame
+);
 
-document.getElementById("restartButton").addEventListener("click", startGame);
+document.getElementById("restartButton").addEventListener(
+  "click",
+  startGame
+);
 
-document.getElementById("playAgainButton").addEventListener("click", startGame);
+document.getElementById("playAgainButton").addEventListener(
+  "click",
+  startGame
+);
