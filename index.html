@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Pixel Quest</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="game-wrapper">
+      <div class="hud">
+        <div>❤️ <span id="lives">3</span></div>
+        <div>🪙 <span id="coins">0</span></div>
+        <div>SCORE <span id="score">0</span></div>
+      </div>
+
+      <canvas id="gameCanvas"></canvas>
+
+      <div id="startScreen" class="screen">
+        <h1>PIXEL QUEST</h1>
+
+        <p>A classic 2D platform adventure</p>
+
+        <button id="startButton">START GAME</button>
+
+        <p class="controls">← → Move &nbsp; | &nbsp; SPACE Jump</p>
+      </div>
+
+      <div id="gameOverScreen" class="screen hidden">
+        <h1>GAME OVER</h1>
+
+        <p>
+          Score:
+          <span id="finalScore">0</span>
+        </p>
+
+        <button id="restartButton">PLAY AGAIN</button>
+      </div>
+
+      <div id="winScreen" class="screen hidden">
+        <h1>🎉 YOU WIN!</h1>
+
+        <p>You completed the level!</p>
+
+        <p>
+          Score:
+          <span id="winScore">0</span>
+        </p>
+
+        <button id="playAgainButton">PLAY AGAIN</button>
+      </div>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>
