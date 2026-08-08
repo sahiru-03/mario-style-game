@@ -61,16 +61,6 @@ Super-Mario-Game/
 └── README.md
 ```
 
-## 📸 Screenshots
-
-Add screenshots of the game here.
-
-```markdown
-![Game Screenshot](C:\Users\USER\OneDrive\Desktop\mario-style-game\images)
-(C:\Users\USER\OneDrive\Desktop\mario-style-game\images)
-(C:\Users\USER\OneDrive\Desktop\mario-style-game\images)
-```
-
 ## 🌐 Live Demo
 
 [Play the Game]([🎮 Play the Game](https://sahiru-03.github.io/mario-style-game/))
