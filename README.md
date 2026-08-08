@@ -66,7 +66,9 @@ Super-Mario-Game/
 Add screenshots of the game here.
 
 ```markdown
-![Game Screenshot](images/screenshot.png)
+![Game Screenshot](C:\Users\USER\OneDrive\Desktop\mario-style-game\images)
+(C:\Users\USER\OneDrive\Desktop\mario-style-game\images)
+(C:\Users\USER\OneDrive\Desktop\mario-style-game\images)
 ```
 
 ## 🌐 Live Demo
