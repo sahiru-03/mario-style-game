@@ -71,7 +71,7 @@ Add screenshots of the game here.
 
 ## 🌐 Live Demo
 
-[Play the Game](YOUR-LIVE-DEMO-LINK)
+[Play the Game]([🎮 Play the Game](https://sahiru-03.github.io/mario-style-game/))
 
 ## 🧠 What I Learned
 
